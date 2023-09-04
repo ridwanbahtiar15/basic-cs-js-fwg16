@@ -1,6 +1,6 @@
 // membalikan kata
-function reverseWords(number) {
-  let stringBaru = " " + number;
+function reverseWords(value) {
+  let stringBaru = " " + value;
   let kataBaru = "";
 
   for (let i = stringBaru.length - 1; i >= 0; i--) {
