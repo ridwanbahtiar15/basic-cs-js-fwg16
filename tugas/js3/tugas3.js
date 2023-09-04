@@ -56,9 +56,6 @@ const film = (nama) => {
   });
 };
 
-// film("spiderman")
-//   .then((result) => console.log(result))
-//   .catch((result) => console.log(result));
 async function cobaAsync() {
   try {
     const result = await film("spiderman");
