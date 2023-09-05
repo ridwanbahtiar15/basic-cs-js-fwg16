@@ -20,4 +20,4 @@ const divideAndSort = (number) => {
   return result.join("");
 };
 
-console.log(divideAndSort(5956560159466056));
+console.log(divideAndSort("5956560159466056"));

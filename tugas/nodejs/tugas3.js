@@ -42,4 +42,5 @@ function FazzFood(harga, voucher, jarak, pajak) {
   return `Harga : ${harga}, Potongan : ${potongan}, Biaya Antar : ${tarif}, Pajak : ${potonganPajak}, Subtotal : ${subtotal}`;
 }
 
-console.log(FazzFood(75000, "DITRAKTIR60", 5, true));
+console.log(FazzFood(75000, "FAZZFOOD50", 5, true));
+console.log(FazzFood(50000, "DITRAKTIR60", 6, true));
