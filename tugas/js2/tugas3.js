@@ -1,6 +1,16 @@
 function cekNIlai(nilaiAwal, nilaiAKhir, dataArray) {
-  // validasi nilaiAkhir harus lebih besar dari nilai nilaiAwal
+  // validasi number
+  const cekArr = dataArray.filter((e) => typeof e !== "number");
+  if (
+    typeof nilaiAwal !== "number" ||
+    typeof nilaiAKhir !== "number" ||
+    cekArr.length > 0
+  ) {
+    return "nilai yang anda input bukan number";
+  }
+
   if (nilaiAwal > nilaiAKhir) {
+    // validasi nilaiAkhir harus lebih besar dari nilai nilaiAwal
     return "Nilai akhir harus lebih besar dari nilai awal";
   }
 
@@ -19,4 +29,7 @@ function cekNIlai(nilaiAwal, nilaiAKhir, dataArray) {
   return filter.sort((a, b) => a - b);
 }
 
-console.log(cekNIlai(5, 20, [2, 25, 4, 14, 17, 30, 18]));
+console.log(cekNIlai(5, 20, [2, 25, 4, 14, 17, 30, 10]));
+// console.log(cekNIlai(15, 3, [2, 25, 4, 14, 17, 30, 8]));
+// console.log(cekNIlai(4, 17, [2, 25, 4]));
+// console.log(cekNIlai(5, 17, [2, 25, 4, 1, 30, 18]));

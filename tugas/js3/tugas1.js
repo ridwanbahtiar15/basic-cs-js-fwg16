@@ -34,6 +34,6 @@ async function cekAsync() {
 }
 cekAsync();
 
-// try catch adalah error handling pada async await dan berfungsi yang mengembalikan promise
+// try catch adalah error handling pada async await pada promise
 // try digunakan untuk menangkap resolve atau ketika kondisi terpenuhi(fullfilled) pada async await
 // catch digunakan untuk menangkap rejected atau ketika kondisi tidak terpenuhi(reject) pada async await

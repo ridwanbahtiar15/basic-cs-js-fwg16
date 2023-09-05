@@ -1,7 +1,7 @@
 // buat dan jelaskan 10 method bawaan javascript beserta contoh penggunaannya
 
 // 1. forEach
-// memecah array menjadi tiap element
+// melakukan perulangan dan memecah array menjadi tiap element
 // non mutasi ->  array asli tidak berubah
 // const angka = [1, 2, 3, 4];
 // angka.forEach((e, i, a) => console.log(e));
@@ -16,7 +16,7 @@
 // console.log(angka);
 
 // 3. filter
-// mencari element yang pertam kali ditemukan
+// mencari element yang ditemukan dan melaukukan pegngecekan secara menyeluruh
 // non mutasi -> array asli tidak berubah
 // const angka = [1, 2, 3, 4];
 // const result = angka.filter((e, i) => e > 2);
@@ -73,7 +73,7 @@
 
 //10. reduce
 // melakukan sesuatu terhadap seluruh element pada array
-// non mutasi -> array asli tidak berubah
+// // non mutasi -> array asli tidak berubah
 // const angka = [1, 2, 3, 4];
 // const result = angka.reduce(
 //   (accumulator, currentValue) => accumulator + currentValue

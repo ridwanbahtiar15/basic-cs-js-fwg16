@@ -34,3 +34,4 @@ function searchName(value, limit, callback) {
   return newName.filter((e, i) => i <= limit - 1);
 }
 console.log(searchName("an", 3, checkName));
+console.log(searchName("el", 5, checkName));
