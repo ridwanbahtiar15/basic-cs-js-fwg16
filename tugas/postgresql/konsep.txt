@@ -1,0 +1,8 @@
+1. sql adalah bahasa pemrogramman untuk mengelola data didalam database.
+dengan sql, kita bisa mengambil, manambah, menghapus, mengubah data.
+
+2. postgresql adalah DBMS yang bersifat open source dan juga banyak digunakan oleh perusahaan besar seperti Apple, Facebook dan Microsoft
+
+3. DB transaction = sekumpulan tindakan yang harus dijalankan sepenuhnya atau tidak dilakukan sema sekali. transaksi database ini harus menjaga data tetap konsisten, terisolasi dari transaksi lain dan tahan terhadap kegagalan sistem agar data dalam database tetap aman
+
+4. database realation adalah cara tabel agar bisa terhubung dengan tabel yang lain dan dapat berbagi informasi antara satu sama lain melalui kolom2 yang memiliki nilai yang sama
