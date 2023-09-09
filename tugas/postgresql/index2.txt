@@ -1,0 +1,317 @@
+create table categorys (
+	categorys_id serial,
+	categorys_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_categorys primary key(categorys_id)
+);
+--
+insert into categorys (categorys_name) values ('Coffee'), ('Non Coffee'), ('Milk');
+
+select * from categorys c ;
+
+create table products (
+	products_id serial,
+	products_name varchar(100) not null,
+	products_price int not null,
+	products_desc text not null,
+	products_stock int not null,
+	products_image varchar(100) not null,
+	categorys_id int not null,
+	promos_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint fk_products_categorys foreign key (categorys_id) references categorys(categorys_id),
+	constraint fk_products_promos foreign key (promos_id) references promos(promos_id)
+);
+
+insert into products (products_name, products_price, products_desc ,products_stock, products_image, categorys_id, promos_id)
+values 
+('Caramel Machiato', 40000, 'Cold brewing is method of brewing that ...', 200, 'caramel-machiato.jpg', 1, 1),
+('Hazelnut Latte', 40000, 'Cold brewing is method of brewing that ...', 200, 'hazelnut-latte.jpg', 1, 1),
+('Kopi Susu', 40000, 'Cold brewing is method of brewing that ...', 200, 'kopi-susu.jpg', 1, 2),
+('Expresso Supreme', 40000, 'Cold brewing is method of brewing that ...', 200, 'expresso-supreme.jpg', 1, 3),
+('Caramel Valvet Latte', 40000, 'Cold brewing is method of brewing that ...', 200, 'caramel-valvet-latte.jpg', 1, 2),
+('Lemon Water', 25000, 'Cold brewing is method of brewing that ...', 160, 'lemon-water.jpg', 2, 1),
+('Strawberry Milk', 36000, 'Cold brewing is method of brewing that ...', 120, 'strawberry-milk.jpg', 3, 3);
+
+select * from products;
+
+--select p.id, p.products_name, p.price, c.categorys_name, pr.promos_name from products p
+--join categorys c on p.categorys_id = c.id
+--join promos pr on p.promos_id = pr.id;
+
+create table promos (
+	promos_id serial,
+	promos_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_promos primary key(promos_id)
+);
+--
+--
+insert into promos (promos_name) values ('FLASHSALE'), ('FAZZFOOD50'), ('DITRAKTIR60');
+
+select * from promos;
+
+create table deliverys (
+	deliverys_id serial,
+	deliverys_name varchar(100) not null,
+	deliverys_cost int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_deliverys primary key(deliverys_id)
+);
+
+insert into deliverys (deliverys_name, deliverys_cost) values ('Dine In', 0), ('Door Delivery', 2000), ('Pickup', 5000);
+
+select * from deliverys;
+
+create table sizes (
+	sizes_id serial,
+	sizes_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_sizes primary key(sizes_id)
+);
+
+insert into sizes (sizes_name) values ('R'), ('L'), ('XL'), ('250gr'), ('500gr');
+
+select * from sizes;
+
+create table products_deliverys (
+	products_deliverys_id serial,
+	products_id int not null,
+	deliverys_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_products_deliverys primary key(products_deliverys_id),
+	constraint fk_products_deliverys_products foreign key (products_id) references products(products_id),
+	constraint fk_products_deliverys_deliverys foreign key (deliverys_id) references deliverys(deliverys_id)
+);
+
+insert into products_deliverys (products_id, deliverys_id) values 
+(1, 1), (1, 2), (2, 1), (2, 2), (3, 2), (4, 1), (5, 1), (5, 2), (6, 1), (7, 2);
+
+select * from products_deliverys;
+
+create table products_sizes (
+	products_sizes_id serial,
+	products_id int not null,
+	sizes_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_products_sizes primary key(products_sizes_id),
+	constraint fk_products_sizes_products foreign key (products_id) references products(products_id),
+	constraint fk_products_sizes_sizes foreign key (sizes_id) references sizes(sizes_id)
+);
+
+insert into products_sizes (products_id, sizes_id) values 
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+(2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
+(3, 1), (3, 2), (3, 3), (3, 4), (3, 5),
+(4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+(5, 1), (5, 2), (5, 3), (5, 4), (5, 5),
+(6, 1), (6, 2), (6, 3),
+(7, 1), (7, 2), (7, 3);
+
+select * from products_sizes;
+
+create table roles (
+	roles_id serial,
+	roles_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_roles primary key(roles_id)
+);
+
+insert into roles (roles_name) values ('Admin'), ('Normal User');
+
+select * from roles;
+
+create table users (
+	users_id serial,
+	users_name varchar(100) not null,
+	users_email varchar(100) not null,
+	users_password varchar(100) not null,
+	users_phone varchar(15) not null,
+	users_address text not null,
+	users_image varchar(100) not null,
+	roles_id int8 not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_users primary key(users_id),
+	constraint fk_users_roles foreign key (roles_id) references roles(roles_id)
+);
+
+insert into users (users_name, users_email, users_password, users_phone, users_address, users_image, roles_id)
+values 
+('Ridwan Bahtiar', 'ridwanbahtiar@gmail.com', '12345', '08128348343', 'Kota Bekasi', 'ridwan-bahtiar.jpg', 1),
+('Eleanor Pena', 'eleanor@gmail.com', '12345', '0852387232', 'Jakarta', 'eleanor.jpg', 2);
+
+create table customers (
+	customers_id serial,
+	customers_name varchar(100) not null,
+	customers_email varchar(100) not null,
+	customers_password varchar(100) not null,
+	customers_phone varchar(15) not null,
+	customers_address text not null,
+	customers_image varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_customers primary key(customers_id)
+);
+
+insert into customers (customers_name, customers_email, customers_password, customers_phone, customers_address, customers_image)
+values 
+('Muhammad Bagas', 'bagas@gmail.com', '12345', '08128344545', 'Kota Bandung', 'bagas.jpg');
+
+
+create table payment_methods (
+	payment_methods_id serial,
+	payment_methods_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_payment_methods primary key(payment_methods_id)
+);
+
+insert into payment_methods (payment_methods_name) values ('Cash'), ('Transfer');
+
+create table status (
+	status_id serial,
+	status_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_status primary key(orders_status_id)
+);
+
+insert into status (orders_status_name) values ('Waiting'), ('Pending'), ('On Progress'), ('Done');
+
+create table orders (
+	orders_id serial,
+	users_id int,
+	customers_id int,
+	payment_methods_id int not null,
+	status_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_orders primary key(orders_id),
+	constraint fk_orders_users foreign key (users_id) references users(users_id),
+	constraint fk_orders_customers foreign key (customers_id) references customers(customers_id),
+	constraint fk_orders_payment_methods foreign key (payment_methods_id) references payment_methods(payment_methods_id),
+	constraint fk_orders_status foreign key (status_id) references status(status_id)
+);
+
+insert into orders (users_id, payment_methods_id, status_id)
+values
+(1, 2, 1), (2, 1, 1);
+
+--alter table product add column promo_id int not null default 0;
+
+--create table users (
+--	id serial,
+--	users_name varchar(100) not null,
+--	users_password int not null,
+--	created_at timestamp not null default NOW(),
+--	updated_at timestamp,
+--	constraint pk_user primary key(id)
+--);
+--
+--insert into users (users_name, users_password) values ('ridwan', '12345'), ('bagus', '12345');
+--
+--create table orders (
+--	id serial,
+--	users_id int not null,
+--	products_id int not null,
+--	created_at timestamp not null default NOW(),
+--	updated_at timestamp,
+--	constraint fk_orders_users foreign key (users_id) references users(id),
+--	constraint fk_orders_products foreign key (products_id) references products(id)
+--);
+
+alter table products add constraint pk_prducts primary key(products_id);
+
+insert into orders (users_id, products_id) values ('1', '1'), ('1', '2'), ('2', '3');
+
+select * from orders;
+
+select o.id, p.products_name, p.price, c.categorys_name, pr.promos_name from products p
+join categorys c on p.categorys_id = c.id
+join promos pr on p.promos_id = pr.id;
+
+
+--crud category
+select * from categorys;
+insert into categorys (categorys_name) values ('Milk');
+update categorys set categorys_name = 'Coffees' where id = 1;
+delete from categorys where id = 3;
+
+--crud poromo
+select * from promos;
+insert into promos (promos_name) values ('FLASHSALE');
+update promos set promos_name = 'FLASHSALE50' where id = 3;
+delete from promos where id = 3;
+
+--crud user
+select * from users;
+insert into users (users_name, users_password) values ('bagas', 54321);
+update users set users_name = 'faqih' where id = 4;
+delete from users where id = 4;
+
+--crud product
+select * from products;
+insert into products (products_name, price, categorys_id, promos_id) values ('Strawberry Cream', 20000, 2, 2);
+update products set products_name = 'Strawberry Cream' where id = 4;
+delete from products where id = 4;
+
+--crud order
+select * from orders;
+insert into orders (users_id, products_id) values (2, 2);
+update orders set products_id = 3 where id = 4;
+delete from orders where id = 4;
+
+
+--query product berdasarkan nama
+select * from products where products_name = 'Cappucinos';
+update products set products_name = 'Cappucinos' where id = 1;
+delete from products where products_name = 'Strawberry Milk';
+
+--query product berdasarkan nama, kategori, promo dan harga
+
+--dengan join
+--berdasarkan products_name
+select p.id, p.products_name, p.price, c.categorys_name, pr.promos_name from products p
+join categorys c on p.categorys_id = c.id
+join promos pr on p.promos_id = pr.id
+where p.products_name = 'Cappucinos';
+
+--berdasarkan categorys_name
+select p.id, p.products_name, p.price, c.categorys_name, pr.promos_name from products p
+join categorys c on p.categorys_id = c.id
+join promos pr on p.promos_id = pr.id
+where c.categorys_name = 'Coffees';
+
+--berdasarkan promos_name
+select p.id, p.products_name, p.price, c.categorys_name, pr.promos_name from products p
+join categorys c on p.categorys_id = c.id
+join promos pr on p.promos_id = pr.id
+where pr.promos_name = 'FAZZFOOD50';
+
+--berdasarkan price
+select p.id, p.products_name, p.price, c.categorys_name, pr.promos_name from products p
+join categorys c on p.categorys_id = c.id
+join promos pr on p.promos_id = pr.id
+where p.price = 20000;
+
+--menampilkan data hanya 3
+--pageinput 1
+--select * from products order by id asc limit 3 offset 6;
+-- pagination
+--create or replace function pagination(page_input int) returns setof products as $$
+--	select * from products order by id asc limit 3 offset page_input * 3 - 3;
+--$$ language sql;
+--
+--select pagination(1);
+
+--drop table products cascade;
+
