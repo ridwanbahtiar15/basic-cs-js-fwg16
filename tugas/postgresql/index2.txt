@@ -314,7 +314,11 @@ delete from orders_products where orders_products_id = 18;
 
 
 --query products berdasarkan products_name
-select * from products where products_name = 'Caramel Machiato';
+select p.products_id, p.products_name, p.products_price, p.products_desc, p.products_stock, p.products_image, c.categorys_name, pr.promos_name 
+from products p
+join categorys c on p.categorys_id = c.categorys_id
+join promos pr on p.promos_id = pr.promos_id
+where p.products_name = 'Caramel Machiato';
 
 --query products berdasarkan products_name, category, promo dan price
 --dengan join
