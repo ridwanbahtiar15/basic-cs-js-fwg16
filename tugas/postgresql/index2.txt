@@ -352,13 +352,10 @@ join promos pr on p.promos_id = pr.promos_id
 where p.products_price  = 40000;
 
 
---menampilkan data hanya 3
---pageinput 1
---select * from products order by id asc limit 3 offset 6;
 -- pagination
-create or replace function pagination(page_input int) returns setof products as $$
-	select * from products order by products_id asc limit 3 offset page_input * 3 - 3;
+create or replace function pagination(page_input int, limit_input int) returns setof products as $$
+	select * from products order by products_id asc limit limit_input offset page_input * limit_input - limit_input;
 $$ language sql;
 
-select pagination(1);
+select pagination(1, 3);
 
