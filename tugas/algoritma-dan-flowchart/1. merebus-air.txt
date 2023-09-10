@@ -1,0 +1,6 @@
+1. mulai
+2. tuang air ke panci
+3. nyalakan kompor
+4. masak air hingga mendidih
+5. matikan kompor
+6. selesai

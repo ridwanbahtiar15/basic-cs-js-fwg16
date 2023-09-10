@@ -1,0 +1,6 @@
+1. mulai
+2. input nilai x dan y
+3. tentukan apakah x > y
+4. jika ya, maka cetak x adalah nilai terbesar
+5. jika tidak, maka cetak y adalah nilai terbesar
+6. selesai

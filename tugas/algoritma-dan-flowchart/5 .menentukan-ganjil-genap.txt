@@ -1,0 +1,6 @@
+1. mulai
+2. input nilai x
+3. cek apkah x jika dibagi 2 sisa hasil nya adalah 0
+4. jika ya, maka cetak x adalah bilangan genap
+5. jika tidak, maka cetak y adalah bilangan ganjil
+6. selesai
