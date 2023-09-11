@@ -117,33 +117,33 @@ insert into products_sizes (products_id, sizes_id) values
 
 select * from products_sizes;
 
-create table hotorice (
-	hotorice_id serial,
-	hotorice_name varchar(100) not null,
+create table hotorices (
+	hotorices_id serial,
+	hotorices_name varchar(100) not null,
 	created_at timestamp not null default NOW(),
 	updated_at timestamp,
-	constraint pk_hotorice primary key(hotorice_id)
+	constraint pk_hotorices primary key(hotorices_id)
 );
 
-insert into hotorice (hotorice_name) values ('Hot'), ('Ice')
+insert into hotorices (hotorices_name) values ('Hot'), ('Ice')
 
-select * from hotorice h;
+select * from hotorices h;
 
-create table products_hotorice (
-	products_hotorice_id serial,
+create table products_hotorices (
+	products_hotorices_id serial,
 	products_id int not null,
-	hotorice_id int not null,
+	hotorices_id int not null,
 	created_at timestamp not null default NOW(),
 	updated_at timestamp,
-	constraint pk_products_hotorice primary key(products_hotorice_id),
-	constraint fk_products_hotorice_products foreign key (products_id) references products(products_id),
-	constraint fk_products_hotorice_hotorice foreign key (hotorice_id) references hotorice(hotorice_id)
+	constraint pk_products_hotorices primary key(products_hotorices_id),
+	constraint fk_products_hotorices_products foreign key (products_id) references products(products_id),
+	constraint fk_products_hotorices_hotorices foreign key (hotorices_id) references hotorices(hotorices_id)
 );
 
-insert into products_hotorice (products_id, hotorice_id) values
+insert into products_hotorices (products_id, hotorices_id) values
 (1, 1), (1, 2), (2, 1), (3 ,2), (4, 2), (5, 1), (6, 2), (7, 2);
 
-select * from products_hotorice;
+select * from products_hotorices;
 
 create table roles (
 	roles_id serial,
@@ -294,16 +294,16 @@ update products_sizes set sizes_id = 5 where products_sizes_id = 32;
 delete from products_sizes where products_sizes_id = 32;
 
 --crud hotOrIce
-select * from hotorice h;
-insert into hotorice (hotorice_name) values ('Warm');
-update hotorice set hotorice_name = 'Cold' where hotorice_id = 2;
-delete from hotorice where hotorice_id = 3;
+select * from hotorices;
+insert into hotorices (hotorices_name) values ('Warm');
+update hotorices set hotorices_name = 'Cold' where hotorices_id = 2;
+delete from hotorices where hotorices_id = 3;
 
 --crud products_hotorice
-select * from products_hotorice ph;
-insert into products_hotorice (products_id, hotorice_id) values (7, 1);
-update products_hotorice set hotorice_id = 1 where products_hotorice_id = 7;
-delete from products_hotorice where products_hotorice_id = 11;
+select * from products_hotorices;
+insert into products_hotorices (products_id, hotorices_id) values (7, 1);
+update products_hotorices set hotorices_id = 1 where products_hotorices_id = 7;
+delete from products_hotorices where products_hotorices_id = 9;
 
 --crud roles
 select * from roles;
@@ -380,4 +380,3 @@ create or replace function pagination(page_input int, limit_input int) returns s
 $$ language sql;
 
 select pagination(1, 3);
-
