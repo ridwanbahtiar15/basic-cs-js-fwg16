@@ -1,0 +1,32 @@
+1. SQL
+- sql adalah bahasa pemrogramman untuk mengelola  dan mengakses data didalam database.
+- Konsep dasar SQL
+  - Database
+  - Table
+  - Query  = select, insert, update, delete, where, join, primary key dan foreign key
+
+2. PostgreSQL
+- PostgreSQL adalah database management system (DBMS) yang digunakan untuk menyimpan dan mengelola data.
+- Bersifat open source
+- Konsep dasar PostgreSQL =
+  - Database
+  - Table
+  - Column
+  - Row
+
+3. DB Transaction
+- DB transaction adalah sekumpulan tindakan yang harus dijalankan sepenuhnya atau tidak dilakukan sama sekali. (contoh ketika kita ingin membeli barang di toko diamana anda hanya membayar jika semuanya berjalan lancar)
+- 4 sifat utama DB Transaction (ACID)
+  - Atomicity (Atomic): Ini berarti Anda hanya akan membayar jika Anda berhasil membeli semua item yang Anda inginkan. Jika ada item yang tidak dapat Anda beli, maka seluruh transaksi dibatalkan.
+  - Consistency (Konsistensi): Sebelum Anda membayar, toko memeriksa apakah semua item yang Anda beli tersedia dan apakah uang Anda cukup. Transaksi hanya akan diterima jika semuanya benar dan konsisten.
+  - Isolation (Isolasi): Transaksi Anda berlangsung terpisah dari transaksi pelanggan lain. Anda tidak melihat atau memengaruhi pembelian mereka, dan sebaliknya.
+  - Durability (Daya Tahan): Setelah Anda membayar, barang-barang yang Anda beli tetap menjadi milik Anda, bahkan jika ada gangguan listrik atau masalah teknis lainnya.
+
+4. DB relation
+- Database Relation adalah cara tabel agar bisa terhubung dengan tabel yang lain
+- Dua aspek utama = Tabel dan Relation
+
+
+
+
+
