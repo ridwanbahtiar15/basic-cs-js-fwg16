@@ -1,0 +1,277 @@
+create table categories (
+	categories_id serial,
+	categories_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_categories primary key(categories_id)
+);
+
+insert into categories (categories_name) values ('Coffee'), ('Non Coffee'), ('Milk');
+
+select * from categories c ;
+
+create table promos (
+	promos_id serial,
+	promos_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_promos primary key(promos_id)
+);
+
+insert into promos (promos_name) values ('FLASHSALE'), ('FAZZFOOD50'), ('DITRAKTIR60');
+
+select * from promos;
+
+
+create table products (
+	products_id serial,
+	products_name varchar(100) not null,
+	products_price int not null,
+	products_desc text null,
+	products_stock int not null,
+	products_image varchar(100) not null,
+	categories_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_products primary key(products_id)
+	constraint fk_products_categories foreign key (categories_id) references categories(categories_id)
+);
+
+insert into products (products_name, products_price, products_desc ,products_stock, products_image, categories_id)
+values 
+('Caramel Machiato', 40000, 'Cold brewing is method of brewing that ...', 200, 'caramel-machiato.jpg', 1),
+('Hazelnut Latte', 40000, 'Cold brewing is method of brewing that ...', 200, 'hazelnut-latte.jpg', 1),
+('Kopi Susu', 40000, 'Cold brewing is method of brewing that ...', 200, 'kopi-susu.jpg', 1),
+('Expresso Supreme', 40000, 'Cold brewing is method of brewing that ...', 200, 'expresso-supreme.jpg', 1),
+('Caramel Valvet Latte', 40000, 'Cold brewing is method of brewing that ...', 200, 'caramel-valvet-latte.jpg', 1),
+('Lemon Water', 25000, 'Cold brewing is method of brewing that ...', 160, 'lemon-water.jpg', 2),
+('Strawberry Milk', 36000, 'Cold brewing is method of brewing that ...', 120, 'strawberry-milk.jpg', 3);
+
+select * from products;
+
+
+create table deliveries (
+	deliverys_id serial,
+	deliverys_name varchar(100) not null,
+	deliveries_cost int8 not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_deliverys primary key(deliverys_id)
+);
+
+insert into deliveries (deliveries, deliveries_cost) values ('Dine In', 0), ('Door Delivery', 2000), ('Pickup', 5000);
+
+select * from deliveries;
+
+create table sizes (
+	sizes_id serial,
+	sizes_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_sizes primary key(sizes_id)
+);
+
+insert into sizes (sizes_name) values ('R'), ('L'), ('XL'), ('250gr'), ('500gr');
+
+select * from sizes;
+
+create table products_sizes (
+	products_sizes_id serial,
+	products_id int not null,
+	sizes_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_products_sizes primary key(products_sizes_id),
+	constraint fk_products_sizes_products foreign key (products_id) references products(products_id),
+	constraint fk_products_sizes_sizes foreign key (sizes_id) references sizes(sizes_id)
+);
+
+insert into products_sizes (products_id, sizes_id) values 
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+(2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
+(3, 1), (3, 2), (3, 3), (3, 4), (3, 5),
+(4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+(5, 1), (5, 2), (5, 3), (5, 4), (5, 5),
+(6, 1), (6, 2), (6, 3),
+(7, 1), (7, 2), (7, 3);
+
+select * from products_sizes;
+
+create table roles (
+	roles_id serial,
+	roles_name varchar(25) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_roles primary key(roles_id)
+);
+
+insert into roles (roles_name) values ('Admin'), ('Normal User');
+
+select * from roles;
+
+create table users (
+	users_id serial,
+	users_fullname varchar(100) not null,
+	users_email varchar(100) not null unique,
+	users_password varchar(100) not null,
+	users_phone varchar(15) not null unique,
+	users_address text not null,
+	users_image varchar(100) not null,
+	roles_id int8 not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_users primary key(users_id),
+	constraint fk_users_roles foreign key (roles_id) references roles(roles_id)
+);
+
+insert into users (users_fullname, users_email, users_password, users_phone, users_address, users_image, roles_id)
+values 
+('Ridwan Bahtiar', 'ridwanbahtiar@gmail.com', '12345', '08128348343', 'Kota Bekasi', 'ridwan-bahtiar.jpg', 1),
+('Eleanor Pena', 'eleanor@gmail.com', '12345', '0852387232', 'Jakarta', 'eleanor.jpg', 2);
+
+create table payment_methods (
+	payment_methods_id serial,
+	payment_methods_name varchar(100) not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_payment_methods primary key(payment_methods_id)
+);
+
+insert into payment_methods (payment_methods_name) values ('Cash'), ('Transfer');
+
+create type status_type as enum('Pending', 'On Progress/Paid', 'Done');
+
+create table orders (
+	orders_id serial,
+	users_id int not null,
+	payment_methods_id int not null,
+	deliveries_id int not null,
+	promos_id int not null default 0,
+	orders_status status_type not null default 'Pending',
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_orders primary key(orders_id),
+	constraint fk_orders_users foreign key (users_id) references users(users_id),
+	constraint fk_orders_payment_methods foreign key (payment_methods_id) references payment_methods(payment_methods_id),
+	constraint fk_orders_deliveries foreign key (deliveries_id) references deliveries(deliveries_id),
+	constraint fk_orders_promos foreign key (promos_id) references promos(promos_id)
+);
+
+drop table orders cascade;
+
+insert into orders (users_id, payment_methods_id, deliveries_id, promos_id, orders_status)
+values
+(1, 2, 1, 1, 'Pending'), (2, 1, 1, 1, 'Done'), (2, 1, 2, 0, 'On Progress/Paid');
+
+select * from orders;
+
+create table orders_products (
+	orders_products_id serial,
+	orders_products_qty int8 not null,
+	orders_id int not null,
+	products_sizes_id int not null,
+	created_at timestamp not null default NOW(),
+	updated_at timestamp,
+	constraint pk_orders_products primary key(orders_products_id),
+	constraint fk_orders_products_orders foreign key (orders_id) references orders(orders_id),
+	constraint fk_orders_products_sizes foreign key (products_sizes_id) references products_sizes(products_sizes_id)
+);
+
+insert into orders_products (orders_products_qty, orders_id, products_sizes_id) values (1, 1, 2), (1, 1, 2), (1, 2, 2), (1, 2, 3), (2, 3, 1), (4, 3, 4), (2, 3, 3), (2, 2, 5);
+
+--crud di semua tabel
+
+--crud categories
+select * from categories;
+insert into categories (categories_name) values ('Water');
+update categories set categories_name = 'Coffee' where categories_id = 1;
+delete from categories where categories_id = 7;
+
+--crud poromos
+select * from promos;
+insert into promos (promos_name) values ('FLASHSALE99');
+update promos set promos_name = 'FLASHSALE' where promos_id = 1;
+delete from promos where promos_id = 4;
+
+--crud deliveries
+select * from deliveries;
+insert into deliveries (deliveries_name, deliveries_cost) values ('Pickup', 5000);
+update deliveries set deliveries_name = 'Pickup Delivery' where deliveries_id = 3;
+delete from deliveries where deliveries_id = 5;
+
+--crud products
+select * from products;
+insert into products (products_name, products_price, products_desc, products_stock, products_image, categories_id) 
+values 
+('Chocolate Milk', 42000, 'Chocolate milk is a chocolate milk', 140, 'chocolate-milk.jpg', 3);
+update products set products_name = 'Coffe Milk' where products_id = 3;
+delete from products where products_id = 9;
+
+--crud sizes
+select * from sizes;
+insert into sizes (sizes_name) values ('600gr');
+update sizes set sizes_name = '550gr' where sizes_id = 6;
+delete from sizes where sizes_id = 6;
+
+--crud products_sizes
+select * from products_sizes;
+insert into products_sizes (products_id, sizes_id) values (7, 4);
+update products_sizes set sizes_id = 5 where products_sizes_id = 32;
+delete from products_sizes where products_sizes_id = 32;
+
+--crud roles
+select * from roles;
+insert into roles (roles_name) values ('Staff');
+update roles set roles_name = 'Staff User' where roles_id = 3;
+delete from roles where roles_id = 3;
+
+--crud users
+select * from users;
+insert into users (users_fullname, users_email, users_password, users_phone, users_address, users_image, roles_id) 
+values 
+('Ronald Richards', 'cikaracak@gmail.com', '12345', '2095550100', '1901 Thornidge Cir. Shiloh Hawaii 81063', 'ronald.jpg', 2);
+update users set roles_id = 1 where users_id = 4;
+delete from users where users_id = 4;
+
+--crud payment_methods
+select * from payment_methods;
+insert into payment_methods (payment_methods_name) values ('QRIS');
+update payment_methods set payment_methods_name  = 'Debit' where payment_methods_id = 3;
+delete from payment_methods where payment_methods_id = 3;
+
+--crud orders
+select * from orders;
+insert into orders (users_id, payment_methods_id, deliveries_id, promos_id, orders_status) 
+values (2, 2, 1, 2, 'Pending');
+update orders set orders_status = 'On Progress/Paid' where orders_id = 4;
+delete from orders where orders_id = 4;
+
+--crud orders_products
+select * from orders_products;
+insert into orders_products (orders_products_qty, orders_id, products_sizes_id) values (1, 1, 1);
+update orders_products set products_sizes_id = 5 where orders_products_id = 17;
+delete from orders_products where orders_products_id = 17;
+
+
+--query products berdasarkan products_name
+select p.products_id, p.products_name, p.products_price, p.products_desc, p.products_stock, p.products_image, c.categories_name
+from products p
+join categories c on p.categories_id = c.categories_id
+where p.products_name like '%Caram%';
+
+
+--query products berdasarkan products_name, categories dan price
+--dengan join
+select p.products_id, p.products_name, p.products_price, p.products_desc, p.products_stock, p.products_image, c.categories_name 
+from products p
+join categories c on p.categories_id = c.categories_id
+--like
+where p.products_name like '%Caramel%'
+--range
+and products_price >= 30000 and products_price <= 40000
+and c.categories_name = 'Coffee';
+
+
+
+-- pagination
+select * from products p order by products_id asc limit 3 offset 0;
