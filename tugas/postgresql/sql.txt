@@ -141,27 +141,29 @@ insert into payment_methods (payment_methods_name) values ('Cash'), ('Transfer')
 
 create type status_type as enum('Pending', 'On Progress/Paid', 'Done');
 
+create type payment_methods_type as enum('Cash', 'Transfer');
+
 create table orders (
 	orders_id serial,
 	users_id int not null,
-	payment_methods_id int not null,
 	deliveries_id int not null,
 	promos_id int not null default 0,
+	payment_methods payment_methods_type not null,
 	orders_status status_type not null default 'Pending',
+	orders_total int8 not null default 0,
 	created_at timestamp not null default NOW(),
 	updated_at timestamp,
 	constraint pk_orders primary key(orders_id),
 	constraint fk_orders_users foreign key (users_id) references users(users_id),
-	constraint fk_orders_payment_methods foreign key (payment_methods_id) references payment_methods(payment_methods_id),
 	constraint fk_orders_deliveries foreign key (deliveries_id) references deliveries(deliveries_id),
 	constraint fk_orders_promos foreign key (promos_id) references promos(promos_id)
 );
 
 drop table orders cascade;
 
-insert into orders (users_id, payment_methods_id, deliveries_id, promos_id, orders_status)
+insert into orders (users_id, deliveries_id, promos_id, payment_methods, orders_status, orders_total)
 values
-(1, 2, 1, 1, 'Pending'), (2, 1, 1, 1, 'Done'), (2, 1, 2, 0, 'On Progress/Paid');
+(1, 2, 1, 'Cash', 'Pending', 0), (2, 1, 1, 'Transfer', 'Done', 0), (2, 1, 0, 'Cash', 'On Progress/Paid', 0);
 
 select * from orders;
 
@@ -170,9 +172,10 @@ create type hot_or_ice_type as enum('Hot', 'Ice');
 
 create table orders_products (
 	orders_products_id serial,
-	orders_products_qty int8 not null,
 	orders_id int not null,
 	products_sizes_id int not null,
+	orders_products_qty int8 not null,
+	orders_products_subtotal int8 not null default 0,
 	hot_or_ice hot_or_ice_type,
 	created_at timestamp not null default NOW(),
 	updated_at timestamp,
@@ -181,7 +184,7 @@ create table orders_products (
 	constraint fk_orders_products_sizes foreign key (products_sizes_id) references products_sizes(products_sizes_id)
 );
 
-insert into orders_products (orders_products_qty, orders_id, products_sizes_id, hot_or_ice) values (1, 1, 2, 'Hot'), (1, 1, 2, 'Hot'), (1, 2, 2, 'Ice'), (1, 2, 3, 'Hot'), (2, 3, 1, 'Ice'), (4, 3, 4, 'Ice'), (2, 3, 3, 'Hot'), (2, 2, 5, 'Hot');
+insert into orders_products (orders_id, products_sizes_id, orders_products_qty, orders_products_subtotal, hot_or_ice) values (1, 1, 2, 0, 'Hot'), (1, 2, 2, 0, 'Hot'), (1, 4, 4, 0, 'Ice'), (1, 20, 3, 0, 'Hot');
 
 drop table orders_products cascade;
 
@@ -281,3 +284,43 @@ and c.categories_name = 'Coffee';
 
 -- pagination
 select * from products p order by products_id asc limit 3 offset 0;
+
+
+
+select o.orders_id, u.users_fullname, py.payment_methods_name, d.deliveries_name, pr.promos_name 
+  from orders o 
+  join users u on o.users_id = u.users_id 
+  join payment_methods py on o.payment_methods_id = py.payment_methods_id 
+  join deliveries d on o.deliveries_id = d.deliveries_id 
+  join promos pr on o.promos_id = pr.promos_id;
+  
+ select sum(p.products_price) as total
+ from orders_products op
+  join products_sizes ps on op.products_sizes_id = ps.products_sizes_id
+  join products p on ps.products_id = p.products_id
+  where op.orders_id = 1
+ group by op.orders_id;
+
+ select op.orders_id, p.products_price
+ from orders_products op
+  join products_sizes ps on op.products_sizes_id = ps.products_sizes_id
+  join products p on ps.products_id = p.products_id;
+  
+ select op.orders_products_id ,op.orders_id ,p.products_name, s.sizes_name, op.orders_products_qty, hot_or_ice 
+ from orders_products op 
+ join products_sizes ps on op.products_sizes_id = ps.products_sizes_id 
+ join products p on ps.products_id = p.products_id 
+ join sizes s on ps.sizes_id = s.sizes_id;
+ 
+select op.orders_products_id ,op.orders_id ,p.products_name, s.sizes_name, op.orders_products_qty, op.orders_products_subtotal, hot_or_ice 
+from orders_products op 
+join products_sizes ps on op.products_sizes_id = ps.products_sizes_id 
+join products p on ps.products_id = p.products_id 
+join sizes s on ps.sizes_id = s.sizes_id;
+
+select op.orders_products_id ,op.orders_id ,p.products_price, s.sizes_name, op.orders_products_qty, op.orders_products_subtotal, hot_or_ice 
+from orders_products op 
+join products_sizes ps on op.products_sizes_id = ps.products_sizes_id 
+join products p on ps.products_id = p.products_id 
+join sizes s on ps.sizes_id = s.sizes_id;
+ 
